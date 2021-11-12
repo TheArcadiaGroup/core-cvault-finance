@@ -1,2 +1,4 @@
-# IDS.Company Sveltekit + Tailwind Init Project
+# Core CVault Finance Page
+
+Uses Sveltekit + Tailwind
 
