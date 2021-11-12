@@ -1,0 +1,21 @@
+html {
+	@apply text-grey-fg bg-themebg;
+}
+
+.win-button {
+	@apply relative after:absolute before:absolute before:top-0 after:top-0 before:left-0 after:left-0 before:w-full after:w-full before:h-full after:h-full;
+}
+.win-button:focus::after {
+	outline: 2px dashed black;
+	outline-offset: 0px;
+}
+
+.win-button:active {
+	padding-top: 2px;
+}
+
+.win-button:active::before {
+	border-style: solid;
+	border-width: 1px;
+	border-color: rgb(10, 10, 10) rgb(254, 254, 254) rgb(254, 254, 254) rgb(10, 10, 10);
+}

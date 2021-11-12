@@ -5,7 +5,9 @@
 <main>
 	<img src="/images/png/logo.png" alt="JEM GITHUB LOGO" class="h-[50px]" />
 	<h1>IDS.Company Base Project</h1>
+	<a href="/borrow">Borrow Page</a>
 	<Jumper size="60" color="#FF3E00" unit="px" duration="1s" />
+	<slot />
 </main>
 
 <style lang="postcss">
