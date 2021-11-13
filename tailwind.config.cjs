@@ -5,10 +5,14 @@ module.exports = {
 	darkMode: false, // or 'media' or 'class'
 	theme: {
 		extend: {
+			spacing: {
+				footer: '3rem'
+			},
 			fontFamily: {
 				win: 'W95FA'
 			},
 			colors: {
+				taskbarDark: '#0a0a0a',
 				themebg: '#201F2D',
 				heading: '#0A0A0A',
 				grey: {
