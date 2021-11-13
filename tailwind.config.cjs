@@ -13,6 +13,7 @@ module.exports = {
 			},
 			customGradient: { title: 'linear-gradient(90.32deg, #5557bc 5.48%, #a9697e 94.35%)' },
 			colors: {
+				border: '#FEFEFE',
 				taskbarDark: '#0a0a0a',
 				themebg: '#201F2D',
 				heading: '#0A0A0A',

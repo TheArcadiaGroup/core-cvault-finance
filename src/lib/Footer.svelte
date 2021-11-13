@@ -1,18 +1,27 @@
 <script lang="ts">
-	import { dispatchTabAction } from './store';
+	import type { TabIds, TabStore } from 'src/global';
+
+	import { dispatchTabAction, tabStore } from './store';
 	import CoreDao from './TaskbarButtons/CoreDaoButton.svelte';
 	import Dashboard from './TaskbarButtons/DashboardButton.svelte';
 	import Governance from './TaskbarButtons/GovernanceButton.svelte';
 	import StatsButton from './TaskbarButtons/StatsButton.svelte';
+	let tabState: TabStore;
+	tabStore.subscribe((v) => {
+		tabState = v;
+	});
+	function getDispatcher(d: TabIds) {
+		return () => dispatchTabAction(tabState[d].state === 'OPEN' ? 'MINIMIZE' : 'OPEN', d);
+	}
 </script>
 
 <footer>
-	<CoreDao onClick={() => dispatchTabAction('OPEN', 'coreDao')} />
+	<CoreDao onClick={getDispatcher('coreDao')} />
 	<div class="divider" aria-hidden />
-	<StatsButton onClick={() => dispatchTabAction('OPEN', 'stats')} />
+	<StatsButton onClick={getDispatcher('stats')} />
 	<div class="divider" aria-hidden />
-	<Dashboard onClick={() => dispatchTabAction('OPEN', 'dashboard')} />
-	<Governance onClick={() => dispatchTabAction('OPEN', 'governance')} />
+	<Dashboard onClick={getDispatcher('dashboard')} />
+	<Governance onClick={getDispatcher('governance')} />
 </footer>
 
 <style lang="postcss">

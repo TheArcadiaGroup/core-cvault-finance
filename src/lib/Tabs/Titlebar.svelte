@@ -16,7 +16,7 @@
 
 <style lang="postcss">
 	div.gradient {
-		@apply text-white flex justify-between p-1;
+		@apply text-white flex justify-between p-1 cursor-pointer select-none;
 		background-image: theme('customGradient.title');
 	}
 	button {
