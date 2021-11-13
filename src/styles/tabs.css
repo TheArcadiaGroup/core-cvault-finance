@@ -1,0 +1,9 @@
+section[data-win-tab] {
+	@apply pt-1 pl-1 pr-1 pb-0 bg-grey-bg;
+}
+div[data-win-tab] {
+	border-color: #fefefe #848584 theme('colors.taskbarDark') #fefefe;
+	border-width: 2px;
+	border-bottom-width: 0px;
+	@apply p-1;
+}

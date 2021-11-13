@@ -11,6 +11,7 @@ module.exports = {
 			fontFamily: {
 				win: 'W95FA'
 			},
+			customGradient: { title: 'linear-gradient(90.32deg, #5557bc 5.48%, #a9697e 94.35%)' },
 			colors: {
 				taskbarDark: '#0a0a0a',
 				themebg: '#201F2D',
@@ -18,7 +19,8 @@ module.exports = {
 				grey: {
 					fg: '#585858',
 					bg: '#C6C6C6',
-					divider: '#848584'
+					divider: '#848584',
+					clicked: '#B2B2B2'
 				}
 			}
 		}

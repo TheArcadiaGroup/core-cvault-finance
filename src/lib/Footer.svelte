@@ -1,17 +1,18 @@
-<script>
-	import CoreDao from './TaskbarButtons/CoreDao.svelte';
-	import Dashboard from './TaskbarButtons/Dashboard.svelte';
-	import Governance from './TaskbarButtons/Governance.svelte';
-	import Stats from './TaskbarButtons/Stats.svelte';
+<script lang="ts">
+	import { dispatchTabAction } from './store';
+	import CoreDao from './TaskbarButtons/CoreDaoButton.svelte';
+	import Dashboard from './TaskbarButtons/DashboardButton.svelte';
+	import Governance from './TaskbarButtons/GovernanceButton.svelte';
+	import StatsButton from './TaskbarButtons/StatsButton.svelte';
 </script>
 
 <footer>
-	<CoreDao />
+	<CoreDao onClick={() => dispatchTabAction('OPEN', 'coreDao')} />
 	<div class="divider" aria-hidden />
-	<Stats />
+	<StatsButton onClick={() => dispatchTabAction('OPEN', 'stats')} />
 	<div class="divider" aria-hidden />
-	<Dashboard />
-	<Governance />
+	<Dashboard onClick={() => dispatchTabAction('OPEN', 'dashboard')} />
+	<Governance onClick={() => dispatchTabAction('OPEN', 'governance')} />
 </footer>
 
 <style lang="postcss">

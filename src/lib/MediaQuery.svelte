@@ -3,7 +3,7 @@
 
 	export let query;
 
-	let mql;
+	let mql: MediaQueryList;
 	let mqlListener;
 	let wasMounted = false;
 	let matches = false;
@@ -33,7 +33,9 @@
 
 	function removeActiveListener() {
 		if (mql && mqlListener) {
-			mql.removeListener(mqlListener);
+			mql.removeEventListener
+				? mql.removeEventListener('change', mqlListener)
+				: mql.removeListener(mqlListener);
 		}
 	}
 </script>

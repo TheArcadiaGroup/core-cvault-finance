@@ -1,4 +1,8 @@
-<button class="win-button">
+<script lang="ts">
+	export let onClick: (e: MouseEvent) => void;
+</script>
+
+<button class="win-button" on:click={onClick}>
 	<img height="24" width="24" src="/images/png/governance.png" alt="Governance" />
 	Governance
 </button>

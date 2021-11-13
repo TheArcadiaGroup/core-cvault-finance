@@ -1,4 +1,8 @@
-<button class="win-button" on:click={() => window.blur()}
+<script lang="ts">
+	export let onClick: (e: MouseEvent) => void;
+</script>
+
+<button class="win-button" on:click={onClick}
 	><svg width="106" height="26" fill="none" xmlns="http://www.w3.org/2000/svg"
 		><path
 			fill-rule="evenodd"
