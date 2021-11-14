@@ -31,7 +31,6 @@
 	} else {
 		if (_previousTabStoreState) tabStore.set(_previousTabStoreState);
 	}
-	$: console.log(isConnectMode);
 </script>
 
 {#if !isConnectMode}
