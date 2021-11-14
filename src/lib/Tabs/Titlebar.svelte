@@ -1,20 +1,50 @@
 <script lang="ts">
+	import { dispatchTabAction } from '$lib/store';
+
+	import type { TabIds } from 'src/global';
+
 	export let title: string;
-	export let onMinimize: () => void;
-	export let onClose: () => void;
+	export let owner: TabIds;
+	export let noMinimize = false;
 </script>
 
 <div class="gradient">
-	<span>{title}</span>
+	<div
+		on:click|self={() => {
+			dispatchTabAction('OPEN', owner);
+		}}
+		class="title drag-handle"
+	>
+		{title}
+	</div>
 	<div>
-		<button on:click={onMinimize} class="win-button" aria-label="Minimize" title="Minimize"
-			>-</button
+		{#if noMinimize}
+			<button
+				on:click={(e) => {
+					e.stopPropagation();
+					dispatchTabAction('MINIMIZE', owner);
+				}}
+				class="win-button"
+				aria-label="Minimize"
+				title="Minimize">-</button
+			>
+		{/if}
+		<button
+			on:click={(e) => {
+				e.stopPropagation();
+				dispatchTabAction('CLOSE', owner);
+			}}
+			class="win-button"
+			aria-label="Close"
+			title="Close">×</button
 		>
-		<button on:click={onClose} class="win-button" aria-label="Close" title="Close">×</button>
 	</div>
 </div>
 
 <style lang="postcss">
+	div.title {
+		@apply flex-1 text-left;
+	}
 	div.gradient {
 		@apply text-white flex justify-between p-1 cursor-pointer select-none;
 		background-image: theme('customGradient.title');

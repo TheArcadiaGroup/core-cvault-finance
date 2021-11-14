@@ -5,8 +5,9 @@
 	export let matches;
 </script>
 
-{#if matches}
+<!-- strict boolean check -->
+{#if matches === true}
 	<MobileTabs />
-{:else}
+{:else if matches === false}
 	<DesktopTabs />
 {/if}

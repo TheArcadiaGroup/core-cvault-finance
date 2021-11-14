@@ -6,7 +6,7 @@
 	let mql: MediaQueryList;
 	let mqlListener;
 	let wasMounted = false;
-	let matches = false;
+	let matches = typeof window === 'undefined' ? null : window.matchMedia(query).matches;
 
 	onMount(() => {
 		wasMounted = true;

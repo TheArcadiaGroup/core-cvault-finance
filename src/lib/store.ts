@@ -9,6 +9,9 @@ export const tabStore = writable<TabStore>({
 	governance: defaultState,
 	stats: { position: 4, state: 'OPEN' }
 });
+export const activeAppIndex = writable(0);
+export const activeAppId = writable<TabIds>('stats');
+
 export type TabAction = 'OPEN' | 'CLOSE' | 'MINIMIZE';
 export interface ITab extends TabState {
 	name: TabIds;
@@ -53,6 +56,10 @@ export function buildNewState(of: ITab, next: ITab, action: TabAction, maxPos = 
 }
 
 export function dispatchTabAction(action: TabAction, target: TabIds) {
+	if (action === 'OPEN') {
+		activeAppIndex.update((x) => x + 2);
+		activeAppId.update(() => target);
+	}
 	tabStore.update((prev) => {
 		const _nextTabsCurrentState = { name: target, ...prev[target] };
 		const next: TabStore = {

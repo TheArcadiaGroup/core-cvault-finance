@@ -28,6 +28,6 @@
 
 <style lang="postcss">
 	div {
-		@apply mt-6;
+		@apply mt-6 flex-row flex;
 	}
 </style>

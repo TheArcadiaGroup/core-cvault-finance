@@ -13,9 +13,21 @@ html {
 	padding-top: 2px;
 	@apply bg-grey-clicked text-taskbarDark;
 	box-shadow: none;
-	border-color: #abc9ab #fefefe #fefefe theme('colors.taskbarDark');
+	border-color: #848584 #fefefe #fefefe theme('colors.taskbarDark');
+}
+section[data-win-tab] {
+	@apply m-auto w-screen h-[calc(100vh-theme('spacing.footer'))]
+	 sm:h-auto top-0 sm:top-auto  bottom-footer sm:bottom-auto 
+	 left-0 sm:left-auto right-0 sm:right-auto absolute 
+	  origin-bottom-left sm:ml-11;
 }
 
+section.stats-section {
+	@apply sm:max-w-xs sm:w-[35vw] sm:left-[calc(25%-5rem)];
+}
+section.core-dao {
+	@apply sm:left-[calc(25%+15rem)] sm:w-[40vw];
+}
 body {
 	overflow: hidden;
 }
