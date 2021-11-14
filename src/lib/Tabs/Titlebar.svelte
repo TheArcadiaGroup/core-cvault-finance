@@ -6,6 +6,7 @@
 	export let title: string;
 	export let owner: TabIds;
 	export let noMinimize = false;
+	export let onClose: () => void = null;
 </script>
 
 <div class="gradient">
@@ -18,7 +19,7 @@
 		{title}
 	</div>
 	<div>
-		{#if noMinimize}
+		{#if !noMinimize}
 			<button
 				on:click={(e) => {
 					e.stopPropagation();
@@ -30,10 +31,11 @@
 			>
 		{/if}
 		<button
-			on:click={(e) => {
-				e.stopPropagation();
-				dispatchTabAction('CLOSE', owner);
-			}}
+			on:click={onClose ||
+				((e) => {
+					e.stopPropagation();
+					dispatchTabAction('CLOSE', owner);
+				})}
 			class="win-button"
 			aria-label="Close"
 			title="Close">×</button

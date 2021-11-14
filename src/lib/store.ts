@@ -1,5 +1,5 @@
 import type { TabIds, TabState, TabStore } from 'src/global';
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 const defaultState: TabState = { position: 0, state: 'CLOSED' };
 export const tabStore = writable<TabStore>({
@@ -7,7 +7,8 @@ export const tabStore = writable<TabStore>({
 	coreDao: { position: 3, state: 'OPEN' },
 	dashboard: defaultState,
 	governance: defaultState,
-	stats: { position: 4, state: 'OPEN' }
+	stats: { position: 4, state: 'OPEN' },
+	'connect:children': defaultState
 });
 export const activeAppIndex = writable(0);
 export const activeAppId = writable<TabIds>('stats');
@@ -56,7 +57,7 @@ export function buildNewState(of: ITab, next: ITab, action: TabAction, maxPos = 
 }
 
 export function dispatchTabAction(action: TabAction, target: TabIds) {
-	if (action === 'OPEN') {
+	if (action === 'OPEN' && get(activeAppId) !== target) {
 		activeAppIndex.update((x) => x + 2);
 		activeAppId.update(() => target);
 	}
@@ -75,7 +76,12 @@ export function dispatchTabAction(action: TabAction, target: TabIds) {
 				_nextTabsCurrentState,
 				action
 			),
-			stats: buildNewState({ name: 'stats', ...prev.stats }, _nextTabsCurrentState, action)
+			stats: buildNewState({ name: 'stats', ...prev.stats }, _nextTabsCurrentState, action),
+			'connect:children': buildNewState(
+				{ name: 'connect:children', ...prev.stats },
+				_nextTabsCurrentState,
+				action
+			)
 		};
 		return next;
 	});

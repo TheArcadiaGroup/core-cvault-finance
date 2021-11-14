@@ -1,25 +1,26 @@
 html {
 	@apply text-grey-fg bg-themebg;
+	--theme-border: theme('colors.border') #848584 theme('colors.taskbarDark') theme('colors.border');
 }
 
 .win-button {
 	@apply relative after:absolute before:absolute before:top-0 after:top-0 before:left-0 after:left-0 before:w-full after:w-full before:h-full after:h-full;
-	border-color: #fefefe #848584 theme('colors.taskbarDark') #fefefe;
+	border-color: var(--theme-border);
 	box-shadow: inset 2px 1px 1px #dfdfdf;
 	background: theme('colors.grey.bg');
 }
 
 .win-button:active {
-	padding-top: 2px;
+	transform: translateY(-2px);
 	@apply bg-grey-clicked text-taskbarDark;
 	box-shadow: none;
-	border-color: #848584 #fefefe #fefefe theme('colors.taskbarDark');
+	border-color: #848584 theme('colors.border') theme('colors.border') #848584;
 }
 section[data-win-tab] {
 	@apply m-auto w-screen h-[calc(100vh-theme('spacing.footer'))]
-	 sm:h-auto top-0 sm:top-auto  bottom-footer sm:bottom-auto 
+	 top-0 sm:top-auto  bottom-footer sm:bottom-auto 
 	 left-0 sm:left-auto right-0 sm:right-auto absolute 
-	  origin-bottom-left sm:ml-11;
+	  origin-bottom-left sm:ml-11 sm:h-auto sm:min-h-[60vh];
 }
 
 section.stats-section {
@@ -28,6 +29,9 @@ section.stats-section {
 section.core-dao {
 	@apply sm:left-[calc(25%+15rem)] sm:w-[40vw];
 }
+section.connect[data-win-tab] {
+	@apply sm:left-0 sm:right-0 sm:m-auto sm:ml-auto sm:mr-auto sm:w-[40vw];
+}
 body {
-	overflow: hidden;
+	overflow-x: hidden;
 }

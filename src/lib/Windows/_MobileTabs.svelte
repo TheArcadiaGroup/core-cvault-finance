@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { tabStore } from '$lib/store';
+	import CoreDao from '$lib/Tabs/CoreDao.svelte';
 	import Stats from '$lib/Tabs/Stats.svelte';
 	import type { TabIds, TabStore } from 'src/global';
 	// ONLY ONE tab on mobile
@@ -13,10 +14,8 @@
 	});
 </script>
 
-{#if activeTab === 'connect'}
-	<span />
-{:else if activeTab === 'stats'}<Stats state={store.stats} />
-{:else if activeTab === 'coreDao'}<span />
+{#if activeTab === 'stats'}<Stats state={store.stats} />
+{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={store.coreDao} />
 {:else if activeTab === 'dashboard'}<span />
 {:else if activeTab === 'governance'}<span />
 {/if}

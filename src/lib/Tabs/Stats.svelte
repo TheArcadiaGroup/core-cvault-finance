@@ -9,7 +9,7 @@
 
 <WindowShell {state} target="stats" sectionClass="stats-section">
 	<div data-win-tab>
-		<Titlebar owner="stats" noMinimize title="stats.exe" />
+		<Titlebar owner="stats" title="stats.exe" />
 	</div>
 	<div class="stats">
 		<h2>Open Positions Summary:</h2>

@@ -18,7 +18,7 @@
 	{#if store.dashboard.state !== 'CLOSED'}
 		<Dashboard state={store.dashboard} />
 	{/if}
-	{#if store.coreDao.state !== 'CLOSED'}
+	{#if store.coreDao.state !== 'CLOSED' || store.connect.state === 'OPEN'}
 		<CoreDao state={store.coreDao} />
 	{/if}
 	{#if store.governance.state !== 'CLOSED'}
