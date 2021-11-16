@@ -42,8 +42,7 @@
 				style="z-index:{activeId == target ? appIndex : '1'}"
 				use:draggable={{
 					handle: '.drag-handle',
-					position: { x: offsetX, y: offsetY },
-					bounds: ':root'
+					position: { x: offsetX, y: offsetY }
 				}}
 				on:svelte-drag={({ detail }) => {
 					offsetX = detail.offsetX;
