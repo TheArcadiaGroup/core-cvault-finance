@@ -101,7 +101,23 @@
 				<div class="repay">
 					<div class="repay-content">
 						<div class="float-txt">Repay</div>
-						<div class="actions">ok</div>
+						<div class="actions">
+							<div class="form-field">
+								<div class="img-container">
+									<img height="20" width="20" src="/images/png/core.png" alt="Core" />
+								</div>
+								<span>CORE</span>
+								<span class="dropdown">></span>
+								<input type="numeric" value="0.0" />
+								<button class="win-button max">Max</button>
+							</div>
+							<div class="button-container bottom" style="margin-top:2rem">
+								<button class="win-button connect" on:click={() => (isConnectMode = true)}>
+									<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
+									Connect Wallet
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			{/if}
