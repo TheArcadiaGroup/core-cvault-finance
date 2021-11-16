@@ -31,7 +31,7 @@
 
 <style lang="postcss">
 	.buttons {
-		@apply flex flex-col items-center justify-center gap-4;
+		@apply flex flex-col items-center justify-center gap-4 pt-2 pb-8;
 	}
 	h2 {
 		@apply text-black text-xl mt-6 mb-6;
