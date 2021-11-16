@@ -70,7 +70,7 @@
 						<div class="actions">
 							<div class="form-field">
 								<div class="img-container">
-									<img height="20" width="20" src="/static/images/png/core.png" alt="Core" />
+									<img height="20" width="20" src="/images/png/core.png" alt="Core" />
 								</div>
 								<span>CORE</span>
 								<span class="dropdown">></span>
@@ -81,7 +81,7 @@
 							<div>Borrow DAI</div>
 							<div class="form-field">
 								<div class="img-container">
-									<img height="20" width="20" src="/static/images/png/dai.png" alt="Dai" />
+									<img height="20" width="20" src="/images/png/dai.png" alt="Dai" />
 								</div>
 								<span>DAI</span>
 								<span class="dropdown">></span>
