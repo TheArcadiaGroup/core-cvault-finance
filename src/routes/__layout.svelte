@@ -8,6 +8,7 @@
 <svelte:head>
 	<title>IDS.Company</title>
 </svelte:head>
+
 <main>
 	<section>
 		<h1>Next Generation Smart Contract Governance</h1>
@@ -32,7 +33,7 @@
 		@apply text-xl opacity-80;
 	}
 	main {
-		@apply flex overflow-auto text-center font-win  md:mt-20 md:block h-[calc(100vh-theme('spacing.footer'))] w-screen justify-center items-center flex-col;
+		@apply flex overflow-auto text-center font-win  md:mt-20 md:block h-[calc(100vh-theme('spacing.footer'))] w-[100%] justify-center items-center flex-col;
 	}
 	h1 {
 		@apply text-3xl;
