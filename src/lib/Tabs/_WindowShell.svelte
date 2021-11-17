@@ -5,11 +5,6 @@
 	import { draggable } from 'svelte-drag';
 	import { activeAppId, activeAppIndex, dispatchTabAction } from '$lib/store';
 	import MediaQuery from '$lib/MediaQuery.svelte';
-	let appIndex: number;
-	let activeId: TabIds;
-	activeAppIndex.subscribe((x) => (appIndex = x));
-	activeAppId.subscribe((x) => void (activeId = x));
-
 	let offsetX: number;
 	let offsetY: number;
 	export let state: TabState;
@@ -39,7 +34,7 @@
 				out:windowCloseTransition
 				data-win-tab
 				class={sectionClass}
-				style="z-index:{activeId == target ? appIndex : '1'}"
+				style="z-index:{$activeAppId == target ? $activeAppIndex : '1'}"
 				use:draggable={{
 					handle: '.drag-handle',
 					position: { x: offsetX, y: offsetY }

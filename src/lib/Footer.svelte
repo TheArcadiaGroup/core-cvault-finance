@@ -3,25 +3,22 @@
 	import MediaQuery from './MediaQuery.svelte';
 
 	import { dispatchTabAction, tabStore } from './store';
-	import CoreDao from './TaskbarButtons/CoreDaoButton.svelte';
-	import Dashboard from './TaskbarButtons/DashboardButton.svelte';
-	import Governance from './TaskbarButtons/GovernanceButton.svelte';
+	import CoreDaoButton from './TaskbarButtons/CoreDaoButton.svelte';
+	import DashboardButton from './TaskbarButtons/DashboardButton.svelte';
+	import GovernanceButton from './TaskbarButtons/GovernanceButton.svelte';
 	import StatsButton from './TaskbarButtons/StatsButton.svelte';
-	let tabState: TabStore;
-	tabStore.subscribe((v) => {
-		tabState = v;
-	});
+
 	const maxPos = 4;
 	function getDispatcher(d: TabIds, isMobile: boolean) {
 		if (!isMobile)
 			return () => {
-				const isAlreadyOpen = tabState[d].state === 'OPEN';
+				const isAlreadyOpen = $tabStore[d].state === 'OPEN';
 				dispatchTabAction(isAlreadyOpen ? 'MINIMIZE' : 'OPEN', d);
 			};
 		return () => {
-			const isAlreadyOpen = tabState[d].state === 'OPEN';
+			const isAlreadyOpen = $tabStore[d].state === 'OPEN';
 			if (isAlreadyOpen) {
-				return dispatchTabAction(tabState[d].position >= maxPos ? 'MINIMIZE' : 'OPEN', d);
+				return dispatchTabAction($tabStore[d].position >= maxPos ? 'MINIMIZE' : 'OPEN', d);
 			}
 			return dispatchTabAction('OPEN', d);
 		};
@@ -30,12 +27,12 @@
 
 <MediaQuery query="(max-width:600px)" let:matches>
 	<footer>
-		<CoreDao onClick={getDispatcher('coreDao', matches)} />
+		<CoreDaoButton onClick={getDispatcher('coreDao', matches)} />
 		<div class="divider" aria-hidden />
 		<StatsButton onClick={getDispatcher('stats', matches)} />
 		<div class="divider" aria-hidden />
-		<Dashboard onClick={getDispatcher('dashboard', matches)} />
-		<Governance onClick={getDispatcher('governance', matches)} />
+		<DashboardButton isMobile={matches} onClick={getDispatcher('dashboard', matches)} />
+		<GovernanceButton isMobile={matches} onClick={getDispatcher('governance', matches)} />
 	</footer>
 </MediaQuery>
 

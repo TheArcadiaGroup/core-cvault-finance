@@ -74,7 +74,7 @@
 								</div>
 								<span>CORE</span>
 								<span class="dropdown">></span>
-								<input type="numeric" value="0.0" />
+								<input value="0.0" />
 								<button class="win-button max">Max</button>
 							</div>
 							<hr />
@@ -85,7 +85,7 @@
 								</div>
 								<span>DAI</span>
 								<span class="dropdown">></span>
-								<input type="numeric" value="0.0" />
+								<input value="0.0" />
 								<button class="win-button max">Max</button>
 							</div>
 							<div class="button-container bottom">
@@ -108,7 +108,7 @@
 								</div>
 								<span>CORE</span>
 								<span class="dropdown">></span>
-								<input type="numeric" value="0.0" />
+								<input value="0.0" />
 								<button class="win-button max">Max</button>
 							</div>
 							<div class="button-container bottom" style="margin-top:2rem">

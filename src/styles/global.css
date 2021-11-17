@@ -1,6 +1,7 @@
 html {
 	@apply text-grey-fg bg-themebg;
 	--theme-border: theme('colors.border') #848584 theme('colors.taskbarDark') theme('colors.border');
+	--h-without-footer: calc(100vh-theme('spacing.footer') + 0.25rem);
 }
 
 @media (min-width: 600px) and (max-width: 1400px) {
@@ -23,7 +24,7 @@ html {
 	border-color: #848584 theme('colors.border') theme('colors.border') #848584;
 }
 section[data-win-tab] {
-	@apply m-auto w-screen h-[calc(100vh-theme('spacing.footer'))]
+	@apply m-auto w-screen h-[var(--h-without-footer)]
 	 top-0 sm:top-auto  bottom-footer sm:bottom-auto 
 	 left-0 sm:left-auto right-0 sm:right-auto absolute 
 	  origin-bottom-left sm:ml-11 sm:h-auto sm:min-h-[60vh];

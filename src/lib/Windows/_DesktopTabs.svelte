@@ -4,25 +4,20 @@
 	import Dashboard from '$lib/Tabs/Dashboard.svelte';
 	import Governance from '$lib/Tabs/Governance.svelte';
 	import Stats from '$lib/Tabs/Stats.svelte';
-	import type { TabStore } from 'src/global';
-	let store: TabStore;
-	tabStore.subscribe((tabs) => {
-		store = tabs;
-	});
 </script>
 
 <div>
-	{#if store.stats.state !== 'CLOSED'}
-		<Stats state={store.stats} />
+	{#if $tabStore.stats.state !== 'CLOSED'}
+		<Stats state={$tabStore.stats} />
 	{/if}
-	{#if store.dashboard.state !== 'CLOSED'}
-		<Dashboard state={store.dashboard} />
+	{#if $tabStore.dashboard.state !== 'CLOSED'}
+		<Dashboard state={$tabStore.dashboard} />
 	{/if}
-	{#if store.coreDao.state !== 'CLOSED' || store.connect.state === 'OPEN'}
-		<CoreDao state={store.coreDao} />
+	{#if $tabStore.coreDao.state !== 'CLOSED' || $tabStore.connect.state === 'OPEN'}
+		<CoreDao state={$tabStore.coreDao} />
 	{/if}
-	{#if store.governance.state !== 'CLOSED'}
-		<Governance state={store.governance} />
+	{#if $tabStore.governance.state !== 'CLOSED'}
+		<Governance state={$tabStore.governance} />
 	{/if}
 </div>
 

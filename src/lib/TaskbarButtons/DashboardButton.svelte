@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { activeAppId } from '$lib/store';
+
 	export let onClick: (e: MouseEvent) => void;
+	export let isMobile: boolean;
 </script>
 
 <button class="win-button" on:click={onClick}>
 	<img height="24" width="24" src="/images/png/dashboard.png" alt="Dashboard" />
-	Dashboard
+	{isMobile && $activeAppId !== 'dashboard' ? '' : 'Dashboard'}
 </button>
 
 <style lang="postcss">
