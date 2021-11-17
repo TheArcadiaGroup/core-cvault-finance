@@ -1,4 +1,4 @@
 # Core CVault Finance Page
 
-Uses Sveltekit + Tailwind
+Uses Sveltekit + Tailwind + Typescript
 
