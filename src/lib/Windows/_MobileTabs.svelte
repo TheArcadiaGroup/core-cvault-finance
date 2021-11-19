@@ -14,8 +14,10 @@
 	})[0][0] as any;
 </script>
 
-{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
-{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />
-{:else if activeTab === 'dashboard'}<span />
-{:else if activeTab === 'governance'}<span />
-{/if}
+<div>
+	{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
+	{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />
+	{:else if activeTab === 'dashboard'}<span />
+	{:else if activeTab === 'governance'}<span />
+	{/if}
+</div>

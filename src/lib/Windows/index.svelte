@@ -3,7 +3,6 @@
 
 	import DesktopTabs from './_DesktopTabs.svelte';
 	import MobileTabs from './_MobileTabs.svelte';
-	console.log($isMobile);
 </script>
 
 <!-- strict boolean check -->
