@@ -1,7 +1,7 @@
 html {
 	@apply text-grey-fg bg-themebg;
 	--theme-border: theme('colors.border') #848584 theme('colors.taskbarDark') theme('colors.border');
-	--h-without-footer: calc(100vh - theme('spacing.footer') + 0.25rem);
+	--h-without-footer: calc(100vh - theme('spacing.footer') - 0.9rem);
 }
 
 @media (min-width: 600px) and (max-width: 1400px) {

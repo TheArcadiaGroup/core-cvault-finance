@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tabStore } from '$lib/store';
+	import { tabStore } from '$lib/store/tab-store';
 
 	import type { TabIds, TabState } from 'src/global';
 	import Connect from './Connect.svelte';

@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { activeAppId } from '$lib/store';
+	import { isMobile } from '$lib/store/media-store';
+
+	import { activeAppId } from '$lib/store/tab-store';
 
 	export let onClick: (e: MouseEvent) => void;
-	export let isMobile: boolean;
 </script>
 
 <button class="win-button" on:click={onClick}>
 	<img height="24" width="24" src="/images/png/governance.png" alt="Governance" />
-	{isMobile && $activeAppId !== 'governance' ? '' : 'Governance'}
+	{$isMobile && $activeAppId !== 'governance' ? '' : 'Governance'}
 </button>
 
 <style lang="postcss">

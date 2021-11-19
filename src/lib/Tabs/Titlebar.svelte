@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { dispatchTabAction } from '$lib/store';
+	import { dispatchTabAction } from '$lib/store/tab-store';
 
 	import type { TabIds } from 'src/global';
 

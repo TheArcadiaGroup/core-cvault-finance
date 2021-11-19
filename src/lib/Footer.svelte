@@ -1,16 +1,16 @@
 <script lang="ts">
-	import type { TabIds, TabStore } from 'src/global';
-	import MediaQuery from './MediaQuery.svelte';
+	import type { TabIds } from 'src/global';
+	import { isMobile } from './store/media-store';
 
-	import { dispatchTabAction, tabStore } from './store';
+	import { dispatchTabAction, tabStore } from './store/tab-store';
 	import CoreDaoButton from './TaskbarButtons/CoreDaoButton.svelte';
 	import DashboardButton from './TaskbarButtons/DashboardButton.svelte';
 	import GovernanceButton from './TaskbarButtons/GovernanceButton.svelte';
 	import StatsButton from './TaskbarButtons/StatsButton.svelte';
 
 	const maxPos = 4;
-	function getDispatcher(d: TabIds, isMobile: boolean) {
-		if (!isMobile)
+	function getDispatcher(d: TabIds) {
+		if (!$isMobile)
 			return () => {
 				const isAlreadyOpen = $tabStore[d].state === 'OPEN';
 				dispatchTabAction(isAlreadyOpen ? 'MINIMIZE' : 'OPEN', d);
@@ -25,16 +25,14 @@
 	}
 </script>
 
-<MediaQuery query="(max-width:600px)" let:matches>
-	<footer>
-		<CoreDaoButton onClick={getDispatcher('coreDao', matches)} />
-		<div class="divider" aria-hidden />
-		<StatsButton onClick={getDispatcher('stats', matches)} />
-		<div class="divider" aria-hidden />
-		<DashboardButton isMobile={matches} onClick={getDispatcher('dashboard', matches)} />
-		<GovernanceButton isMobile={matches} onClick={getDispatcher('governance', matches)} />
-	</footer>
-</MediaQuery>
+<footer>
+	<CoreDaoButton onClick={getDispatcher('coreDao')} />
+	<div class="divider" aria-hidden />
+	<StatsButton onClick={getDispatcher('stats')} />
+	<div class="divider" aria-hidden />
+	<DashboardButton onClick={getDispatcher('dashboard')} />
+	<GovernanceButton onClick={getDispatcher('governance')} />
+</footer>
 
 <style lang="postcss">
 	.divider {
