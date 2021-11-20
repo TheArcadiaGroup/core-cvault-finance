@@ -14,6 +14,10 @@
 	})[0][0] as any;
 </script>
 
+<!-- wrap it in a div..otherwise svelte transition 
+forgets to unmount the child nodes if we change the width too often
+this shouldn't happen but..still very ugly that this bug is seen
+-->
 <div>
 	{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
 	{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />

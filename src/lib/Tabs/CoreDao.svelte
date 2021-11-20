@@ -132,7 +132,7 @@
 		@apply mt-4;
 	}
 	button.connect {
-		@apply w-1/2;
+		@apply w-1/2 min-w-[200px];
 	}
 	.max.win-button {
 		border-bottom-color: black;
