@@ -7,14 +7,14 @@
 	import DashboardButton from './TaskbarButtons/DashboardButton.svelte';
 	import GovernanceButton from './TaskbarButtons/GovernanceButton.svelte';
 	import StatsButton from './TaskbarButtons/StatsButton.svelte';
-
 	const maxPos = 4;
-	function getDispatcher(d: TabIds) {
-		if (!$isMobile)
-			return () => {
-				const isAlreadyOpen = $tabStore[d].state === 'OPEN';
-				dispatchTabAction(isAlreadyOpen ? 'MINIMIZE' : 'OPEN', d);
-			};
+	function mobileDispatcher(d: TabIds) {
+		return () => {
+			const isAlreadyOpen = $tabStore[d].state === 'OPEN' && $tabStore[d].position >= maxPos;
+			dispatchTabAction(isAlreadyOpen ? 'MINIMIZE' : 'OPEN', d);
+		};
+	}
+	function desktopDispatcher(d: TabIds) {
 		return () => {
 			const isAlreadyOpen = $tabStore[d].state === 'OPEN';
 			if (isAlreadyOpen) {
@@ -23,6 +23,8 @@
 			return dispatchTabAction('OPEN', d);
 		};
 	}
+	let getDispatcher = $isMobile ? mobileDispatcher : desktopDispatcher;
+	$: getDispatcher = $isMobile ? mobileDispatcher : desktopDispatcher;
 </script>
 
 <footer>
