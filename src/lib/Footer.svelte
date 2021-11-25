@@ -28,11 +28,11 @@
 </script>
 
 <footer>
-	<CoreDaoButton onClick={getDispatcher('coreDao')} />
+	<CoreDaoButton />
 	<div class="divider" aria-hidden />
 	<StatsButton onClick={getDispatcher('stats')} />
 	<div class="divider" aria-hidden />
-	<DashboardButton onClick={getDispatcher('dashboard')} />
+	<DashboardButton onClick={getDispatcher('coreDao')} />
 	<GovernanceButton onClick={getDispatcher('governance')} />
 </footer>
 

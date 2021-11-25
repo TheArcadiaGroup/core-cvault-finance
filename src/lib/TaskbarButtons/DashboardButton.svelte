@@ -8,7 +8,7 @@
 
 <button class="win-button" on:click={onClick}>
 	<img height="24" width="24" src="/images/png/dashboard.png" alt="Dashboard" />
-	{$isMobile && $activeAppId !== 'dashboard' ? '' : 'Dashboard'}
+	{$isMobile && $activeAppId !== 'coreDao' ? '' : 'Dashboard'}
 </button>
 
 <style lang="postcss">
