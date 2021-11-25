@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>IDS.Company</title>
+	<title>CORE Vault</title>
 </svelte:head>
 
 <main>
