@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tabStore } from '$lib/store';
+	import { tabStore } from '$lib/store/tab-store';
 
 	import type { TabIds, TabState } from 'src/global';
 	import Connect from './Connect.svelte';
@@ -132,7 +132,7 @@
 		@apply mt-4;
 	}
 	button.connect {
-		@apply w-1/2;
+		@apply w-1/2 min-w-[200px];
 	}
 	.max.win-button {
 		border-bottom-color: black;

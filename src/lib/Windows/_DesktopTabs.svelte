@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tabStore } from '$lib/store';
+	import { tabStore } from '$lib/store/tab-store';
 	import CoreDao from '$lib/Tabs/CoreDao.svelte';
 	import Dashboard from '$lib/Tabs/Dashboard.svelte';
 	import Governance from '$lib/Tabs/Governance.svelte';

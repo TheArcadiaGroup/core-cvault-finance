@@ -78,7 +78,7 @@ export function dispatchTabAction(action: TabAction, target: TabIds) {
 			),
 			stats: buildNewState({ name: 'stats', ...prev.stats }, _nextTabsCurrentState, action),
 			'connect:children': buildNewState(
-				{ name: 'connect:children', ...prev.stats },
+				{ name: 'connect:children', ...prev['connect:children'] },
 				_nextTabsCurrentState,
 				action
 			)

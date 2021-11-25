@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { TabState } from 'src/global';
 
-	export let state: TabState;
+	export const state: TabState = null;
 </script>
 
 <span />

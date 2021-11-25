@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tabStore } from '$lib/store';
+	import { tabStore } from '$lib/store/tab-store';
 	import CoreDao from '$lib/Tabs/CoreDao.svelte';
 	import Stats from '$lib/Tabs/Stats.svelte';
 	import type { TabIds } from 'src/global';
@@ -14,8 +14,14 @@
 	})[0][0] as any;
 </script>
 
-{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
-{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />
-{:else if activeTab === 'dashboard'}<span />
-{:else if activeTab === 'governance'}<span />
-{/if}
+<!-- wrap it in a div..otherwise svelte transition 
+forgets to unmount the child nodes if we change the width too often
+this shouldn't happen but..still very ugly that this bug is seen
+-->
+<div>
+	{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
+	{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />
+	{:else if activeTab === 'dashboard'}<span />
+	{:else if activeTab === 'governance'}<span />
+	{/if}
+</div>
