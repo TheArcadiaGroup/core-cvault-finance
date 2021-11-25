@@ -1,12 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-export type TabIds =
-	| 'coreDao'
-	| 'stats'
-	| 'connect'
-	| 'dashboard'
-	| 'governance'
-	| 'connect:children';
+export type TabIds = 'coreDao' | 'stats' | 'connect' | 'governance' | 'connect:children';
 interface TabState {
 	position: number;
 	state: 'MINIMIZED' | 'OPEN' | 'CLOSED';

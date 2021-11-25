@@ -5,7 +5,6 @@ const defaultState: TabState = { position: 0, state: 'CLOSED' };
 export const tabStore = writable<TabStore>({
 	connect: defaultState,
 	coreDao: { position: 3, state: 'OPEN' },
-	dashboard: defaultState,
 	governance: defaultState,
 	stats: { position: 4, state: 'OPEN' },
 	'connect:children': defaultState
@@ -66,11 +65,6 @@ export function dispatchTabAction(action: TabAction, target: TabIds) {
 		const next: TabStore = {
 			connect: buildNewState({ name: 'connect', ...prev.connect }, _nextTabsCurrentState, action),
 			coreDao: buildNewState({ name: 'coreDao', ...prev.coreDao }, _nextTabsCurrentState, action),
-			dashboard: buildNewState(
-				{ name: 'dashboard', ...prev.dashboard },
-				_nextTabsCurrentState,
-				action
-			),
 			governance: buildNewState(
 				{ name: 'governance', ...prev.governance },
 				_nextTabsCurrentState,

@@ -21,7 +21,12 @@ this shouldn't happen but..still very ugly that this bug is seen
 <div>
 	{#if activeTab === 'stats'}<Stats state={$tabStore.stats} />
 	{:else if activeTab === 'coreDao' || activeTab === 'connect'}<CoreDao state={$tabStore.coreDao} />
-	{:else if activeTab === 'dashboard'}<span />
 	{:else if activeTab === 'governance'}<span />
 	{/if}
 </div>
+
+<style lang="postcss">
+	div {
+		@apply h-full m-0 p-0 absolute inset-y-0 left-0;
+	}
+</style>
