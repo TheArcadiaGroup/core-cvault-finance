@@ -23,7 +23,7 @@
 
 {#if state.state === 'OPEN'}
 	{#if $isMobile === true}
-		<section transition:scale data-win-tab class={sectionClass}>
+		<section transition:scale data-win-tab data-mob-tab class={sectionClass}>
 			<slot />
 		</section>
 	{:else if $isMobile === false}
@@ -59,5 +59,8 @@
 	}
 	section {
 		@apply sm:ml-6;
+	}
+	section[data-win-tab][data-mob-tab] {
+		@apply m-0 h-full;
 	}
 </style>

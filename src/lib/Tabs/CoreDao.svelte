@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { tabStore } from '$lib/store/tab-store';
 
-	import type { TabIds, TabState } from 'src/global';
+	import type { TabIds, TabState, TabStore } from 'src/global';
 	import Connect from './Connect.svelte';
 	import Titlebar from './Titlebar.svelte';
 
@@ -13,7 +13,7 @@
 	let _previousTabStoreState;
 
 	$: if (isConnectMode) {
-		tabStore.update((prev) => {
+		tabStore.update((prev): TabStore => {
 			const getTState = (x: TabIds): TabState => ({
 				position: 0,
 				state: prev[x].state === 'CLOSED' ? 'CLOSED' : 'MINIMIZED'
@@ -22,7 +22,6 @@
 			return {
 				connect: getTState('connect'),
 				coreDao: getTState('coreDao'),
-				dashboard: getTState('dashboard'),
 				governance: getTState('governance'),
 				stats: getTState('stats'),
 				'connect:children': getTState('connect:children')
