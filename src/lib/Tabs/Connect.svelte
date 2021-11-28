@@ -5,6 +5,7 @@
 	import Walletconnect from '$lib/icons/Walletconnect.svelte';
 	import Coinbase from '$lib/icons/Coinbase.svelte';
 	import { freshConnect, initWeb3ModalInstance } from '$helpers/walletConnection';
+	import { appProvider, userWalletAddress } from '$stores/provider';
 
 	export let close: () => void;
 
@@ -26,7 +27,13 @@
 <WindowShell state={{ position: 1, state: 'OPEN' }} target="connect" sectionClass="connect">
 	<Titlebar owner="connect" noMinimize onClose={close} title="Connect" />
 	<div>
-		<h2>Connect with.</h2>
+		<h2>
+			{$appProvider
+				? `Connected to: ${$userWalletAddress.substring(0, 6)}...${$userWalletAddress.substring(
+						$userWalletAddress.length - 6
+				  )}`
+				: 'Connect with.'}
+		</h2>
 		<div class="buttons">
 			<button class="win-button" on:click={() => connect('metamask')}>
 				<Metamask />

@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { appProvider, web3ModalInstance } from '$stores/provider';
+import { appProvider, appSigner, userWalletAddress, web3ModalInstance } from '$stores/provider';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 import { error } from '$helpers/toastNotification';
@@ -89,6 +89,8 @@ export const initProvider = async (provider: any) => {
 	const ethersProvider = new ethers.providers.Web3Provider(provider);
 	ethersProvider.on('connect', (e) => console.log(Object.keys(e)));
 	appProvider.set(ethersProvider ? ethersProvider : null);
+	appSigner.set(ethersProvider ? ethersProvider.getSigner() : null);
+	userWalletAddress.set(ethersProvider ? await ethersProvider.getSigner().getAddress() : '');
 
 	console.log(
 		'WALLET CONNECTED.\n BALANCE: ',
