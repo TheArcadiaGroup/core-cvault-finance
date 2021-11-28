@@ -22,3 +22,10 @@
 /* Directive controlling where Tailwind injects responsive variations of utilities.
    By default Tailwind normally append these at the end of your stylesheet. */
 @tailwind screens;
+
+:root {
+	--toastContainerTop: auto;
+	--toastContainerRight: 2rem;
+	--toastContainerBottom: 8rem;
+	/* --toastContainerLeft: calc(50vw - 8rem); */
+}

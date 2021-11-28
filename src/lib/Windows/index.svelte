@@ -1,5 +1,5 @@
 <script>
-	import { isMobile } from '$lib/store/media-store';
+	import { isMobile } from '$stores/media-store';
 
 	import DesktopTabs from './_DesktopTabs.svelte';
 	import MobileTabs from './_MobileTabs.svelte';

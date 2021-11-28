@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { isMobile } from '$lib/store/media-store';
+	import { isMobile } from '$stores/media-store';
 
-	import { activeAppId } from '$lib/store/tab-store';
+	import { activeAppId } from '$stores/tab-store';
 
 	export let onClick: (e: MouseEvent) => void;
 </script>

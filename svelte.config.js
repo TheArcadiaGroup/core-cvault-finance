@@ -18,7 +18,8 @@ const config = {
 			resolve: {
 				alias: {
 					$stores: path.resolve('./src/stores'),
-					$styles: path.resolve('./src/styles')
+					$styles: path.resolve('./src/styles'),
+					$helpers: path.resolve('./src/helpers')
 				}
 			}
 		}

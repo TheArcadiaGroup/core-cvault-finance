@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { TabIds } from 'src/global';
-	import { isMobile } from './store/media-store';
+	import { isMobile } from '../stores/media-store';
 
-	import { dispatchTabAction, tabStore } from './store/tab-store';
+	import { dispatchTabAction, tabStore } from '../stores/tab-store';
 	import CoreDaoButton from './TaskbarButtons/CoreDaoButton.svelte';
 	import DashboardButton from './TaskbarButtons/DashboardButton.svelte';
 	import GovernanceButton from './TaskbarButtons/GovernanceButton.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { isMobile } from './store/media-store';
+	import { isMobile } from '../stores/media-store';
 	import { browser } from '$app/env';
 	import Windows from './Windows/index.svelte';
 

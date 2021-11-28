@@ -3,8 +3,8 @@
 	import { scale } from 'svelte/transition';
 	import { sineInOut } from 'svelte/easing';
 	import { draggable } from 'svelte-drag';
-	import { activeAppId, activeAppIndex, dispatchTabAction } from '$lib/store/tab-store';
-	import { isMobile } from '$lib/store/media-store';
+	import { activeAppId, activeAppIndex, dispatchTabAction } from '$stores/tab-store';
+	import { isMobile } from '$stores/media-store';
 	let offsetX: number;
 	let offsetY: number;
 	export let state: TabState;

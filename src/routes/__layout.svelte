@@ -1,8 +1,28 @@
-<script>
+<script lang="ts">
 	import '$styles/tailwind.css';
 	import '$styles/global.css';
 	import '$styles/tabs.css';
 	import Footer from '$lib/Footer.svelte';
+	import { onMount } from 'svelte';
+	import { appProvider } from '$stores/provider';
+	import Toast from '$lib/utils/Toast.svelte';
+	import {
+		getWeb3ModalProvider,
+		initProvider,
+		initWeb3ModalInstance
+	} from '$helpers/walletConnection';
+
+	onMount(async () => {
+		const web3Modal = initWeb3ModalInstance();
+
+		if (!$appProvider && web3Modal?.cachedProvider) {
+			const provider = await getWeb3ModalProvider(web3Modal);
+			await initProvider(provider);
+		} else {
+			// Wallet Not Connected
+			console.log('Wallet Not Connected');
+		}
+	});
 </script>
 
 <svelte:head>
@@ -20,6 +40,7 @@
 	<slot />
 </main>
 <Footer />
+<Toast />
 
 <style lang="postcss">
 	* {

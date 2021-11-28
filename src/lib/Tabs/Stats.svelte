@@ -5,7 +5,7 @@
 	import WindowShell from './_WindowShell.svelte';
 	import InfoIcon from '$lib/icons/InfoIcon.svelte';
 	import { onMount } from 'svelte';
-	import { fetchService, responseMap, routes } from '$lib/store/fetch-service';
+	import { fetchService, responseMap, routes } from '$stores/fetch-service';
 
 	export let state: TabState;
 	let loanStats: typeof responseMap['/api/loanStats'];
