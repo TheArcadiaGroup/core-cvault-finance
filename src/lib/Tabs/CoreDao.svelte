@@ -132,9 +132,13 @@
 								<button class="win-button max">Max</button>
 							</div>
 							<div class="button-container bottom" style="margin-top:2rem">
-								<button class="win-button connect" on:click={() => (isConnectMode = true)}>
+								<button class="win-button connect" on:click={connectOrDisconnect}>
 									<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
-									Connect Wallet
+									{#if $appSigner}
+										Disconnect Wallet
+									{:else}
+										Connect Wallet
+									{/if}
 								</button>
 							</div>
 						</div>
