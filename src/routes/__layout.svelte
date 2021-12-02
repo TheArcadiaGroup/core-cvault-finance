@@ -18,11 +18,8 @@
 		if (!$appProvider && web3Modal?.cachedProvider) {
 			const provider = await getWeb3ModalProvider(web3Modal);
 			await initProvider(provider);
-
-			console.log($appSigner);
 		} else {
 			// Wallet Not Connected
-			console.log('Wallet Not Connected');
 		}
 	});
 </script>

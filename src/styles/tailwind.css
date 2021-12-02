@@ -24,8 +24,8 @@
 @tailwind screens;
 
 :root {
-	--toastContainerTop: auto;
+	/* --toastContainerTop: auto; */
 	--toastContainerRight: 2rem;
-	--toastContainerBottom: 8rem;
+	/* --toastContainerBottom: 8rem; */
 	/* --toastContainerLeft: calc(50vw - 8rem); */
 }

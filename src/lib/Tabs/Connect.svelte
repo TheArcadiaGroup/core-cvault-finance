@@ -6,6 +6,7 @@
 	import Coinbase from '$lib/icons/Coinbase.svelte';
 	import { freshConnect, initWeb3ModalInstance } from '$helpers/walletConnection';
 	import { appProvider, userWalletAddress } from '$stores/provider';
+	import disconnectWallet from '$helpers/disconnectWallet';
 
 	export let close: () => void;
 
@@ -13,13 +14,11 @@
 	const connect = async (selectedProvider: 'metamask' | 'walletConnect' | 'coinbase') => {
 		const web3Modal = initWeb3ModalInstance();
 		const initializedProvider = await freshConnect(selectedProvider, web3Modal);
-
 		if (initializedProvider) {
 			// Close modal after successful connection
 			close();
 		} else {
 			// Do something after connection failed
-			console.log(initializedProvider);
 		}
 	};
 </script>
@@ -27,12 +26,15 @@
 <WindowShell state={{ position: 1, state: 'OPEN' }} target="connect" sectionClass="connect">
 	<Titlebar owner="connect" noMinimize onClose={close} title="Connect" />
 	<div>
-		<h2>
-			{$appProvider
-				? `Connected to: ${$userWalletAddress.substring(0, 6)}...${$userWalletAddress.substring(
-						$userWalletAddress.length - 6
-				  )}`
-				: 'Connect with.'}
+		<h2 class="flex flex-col items-center">
+			{#if $appProvider}
+				{`Connected to: ${$userWalletAddress.substring(0, 6)}...${$userWalletAddress.substring(
+					$userWalletAddress.length - 6
+				)}`}
+				<button class="win-button mt-2" on:click={disconnectWallet}> Disconnect </button>
+			{:else}
+				Connect With
+			{/if}
 		</h2>
 		<div class="buttons">
 			<button class="win-button" on:click={() => connect('metamask')}>

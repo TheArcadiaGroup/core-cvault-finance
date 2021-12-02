@@ -1,4 +1,7 @@
 <script lang="ts">
+	import disconnectWallet from '$helpers/disconnectWallet';
+
+	import { appSigner } from '$stores/provider';
 	import { tabStore } from '$stores/tab-store';
 
 	import type { TabIds, TabState, TabStore } from 'src/global';
@@ -11,6 +14,16 @@
 	let activeTab: 'borrow' | 'repay' = 'borrow';
 	let isConnectMode = false;
 	let _previousTabStoreState;
+
+	const connectOrDisconnect = () => {
+		if ($appSigner) {
+			// Disconnect
+			disconnectWallet();
+		} else {
+			// Connect
+			isConnectMode = true;
+		}
+	};
 
 	$: if (isConnectMode) {
 		tabStore.update((prev): TabStore => {
@@ -42,9 +55,13 @@
 				<h2>Ready to farm without inflation?</h2>
 			</div>
 			<div class="button-container">
-				<button class="win-button connect" on:click={() => (isConnectMode = true)}>
+				<button class="win-button connect" on:click={connectOrDisconnect}>
 					<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
-					Connect Wallet
+					{#if $appSigner}
+						Disconnect Wallet
+					{:else}
+						Connect Wallet
+					{/if}
 				</button>
 			</div>
 			<div class="cvault">
@@ -88,9 +105,13 @@
 								<button class="win-button max">Max</button>
 							</div>
 							<div class="button-container bottom">
-								<button class="win-button connect" on:click={() => (isConnectMode = true)}>
+								<button class="win-button connect" on:click={connectOrDisconnect}>
 									<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
-									Connect Wallet
+									{#if $appSigner}
+										Disconnect Wallet
+									{:else}
+										Connect Wallet
+									{/if}
 								</button>
 							</div>
 						</div>
@@ -129,9 +150,6 @@
 <style lang="postcss">
 	.button-container.bottom {
 		@apply mt-4;
-	}
-	button.connect {
-		@apply w-1/2 min-w-[200px];
 	}
 	.max.win-button {
 		border-bottom-color: black;
@@ -177,9 +195,13 @@
 		@apply flex items-center justify-center;
 	}
 	button {
-		@apply flex items-center justify-center pt-1 pb-1 w-[75%] 
-		font-win gap-2 text-black
-			border-2 p-1 sm:pl-5 sm:pr-5;
+		@apply flex items-center justify-center py-1 w-3/4;
+		@apply font-win gap-2 text-black;
+		@apply border-2 p-1 sm:pl-5 sm:pr-5;
+	}
+
+	button.connect {
+		@apply max-w-[70%] min-w-[200px];
 	}
 	h2 {
 		@apply text-black text-xl text-center m-4;

@@ -6,4 +6,5 @@ node_modules
 .vscode/
 pnpm-lock.yaml
 .pnpm-debug.log
+/.vercel_build_output
 
