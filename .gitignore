@@ -7,4 +7,6 @@ node_modules
 pnpm-lock.yaml
 .pnpm-debug.log
 /.vercel_build_output
+package-lock.json
+static/wallets.js
 

@@ -6,7 +6,8 @@ import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 
 const infuraId = '456e115b04624699aa0e776f6f2ee65c';
-// const defaultChainId = 42;
+const defaultChainId = 1;
+const appName = 'CVault.Finance';
 
 // Is Metamask Installed
 const isMetaMaskInstalled = () => {
@@ -15,18 +16,6 @@ const isMetaMaskInstalled = () => {
 			return window.ethereum.providers.find((prov) => prov.isMetaMask);
 		} else {
 			return window.ethereum?.isMetaMask;
-		}
-	}
-	return false;
-};
-
-// Is Coinbase Extension Installed
-const isCoinbaseExtensionInstalled = () => {
-	if (window.ethereum) {
-		if (window.ethereum.providers) {
-			return window.ethereum.providers.find((prov) => prov.isWalletLink);
-		} else {
-			return window.ethereum?.isWalletLink;
 		}
 	}
 	return false;
@@ -54,12 +43,6 @@ export const freshConnect = async (
 	if (selectedProvider === 'metamask' && !isMetaMaskInstalled()) {
 		error('Please Install the Metamask Browser Extension Before Proceeding');
 		console.log('Please Install the Metamask Browser Extension Before Proceeding');
-		return;
-	}
-
-	if (selectedProvider === 'coinbase' && !isCoinbaseExtensionInstalled()) {
-		error('Please Install the Coinbase Browser Extension Before Proceeding');
-		console.log('Please Install the Coinbase Browser Extension Before Proceeding');
 		return;
 	}
 
@@ -142,39 +125,27 @@ export const initWeb3ModalInstance = () => {
 					return provider;
 				}
 			},
+			// Coinbase or other WalletLink Wallets
 			'custom-coinbase': {
 				display: {
 					logo: coinbaseLogo,
 					name: 'Coinbase',
-					description: 'Connect to your Coinbase Wallet'
+					description: 'Scan with WalletLink to connect'
 				},
-				package: true,
-				connector: async () => {
-					if (!isCoinbaseExtensionInstalled()) {
-						// window.location = "https://metamask.app.link/dapp/www.ethbox.org/app/"; // <-- LOOK HERE
-						return;
-					}
-
-					let provider = null;
-					if (typeof window.ethereum !== 'undefined') {
-						if (window.ethereum.providers) {
-							let providers = window.ethereum.providers;
-							provider = providers.find((prov) => prov.isWalletLink);
-						} else {
-							provider = window.ethereum;
-						}
-						try {
-							await provider.request({ method: 'eth_requestAccounts' });
-						} catch (error) {
-							console.log('Wallet Request Cancelled');
-							return;
-						}
-					} else {
-						console.log('No Coinbase Wallet found');
-						return;
-					}
-
-					console.log('Coinbase provider', provider);
+				options: {
+					appName: appName, // Your app name
+					networkUrl: `https://mainnet.infura.io/v3/${infuraId}`,
+					chainId: defaultChainId,
+					network: 'mainnet'
+				},
+				package: (window as any).WalletLink.default,
+				connector: async (_, options) => {
+					const { appName, networkUrl, chainId } = options;
+					const walletLink = new (window as any).WalletLink.default({
+						appName
+					});
+					const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
+					await provider.enable();
 					return provider;
 				}
 			}
