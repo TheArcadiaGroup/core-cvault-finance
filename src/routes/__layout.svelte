@@ -6,18 +6,13 @@
 	import { onMount } from 'svelte';
 	import { appProvider, appSigner } from '$stores/provider';
 	import Toast from '$lib/utils/Toast.svelte';
-	import {
-		getWeb3ModalProvider,
-		initProvider,
-		initWeb3ModalInstance
-	} from '$helpers/walletConnection';
+	import { getWeb3ModalProvider, initWeb3ModalInstance } from '$helpers/walletConnection';
 
 	onMount(async () => {
 		const web3Modal = initWeb3ModalInstance();
 
 		if (!$appProvider && web3Modal?.cachedProvider) {
-			const provider = await getWeb3ModalProvider(web3Modal);
-			await initProvider(provider);
+			await getWeb3ModalProvider(web3Modal);
 		} else {
 			// Wallet Not Connected
 		}

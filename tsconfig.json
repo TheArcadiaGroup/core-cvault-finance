@@ -30,7 +30,9 @@
 			"$stores": ["src/stores"],
 			"$stores/*": ["src/stores/*"],
 			"$helpers": ["src/helpers"],
-			"$helpers/*": ["src/helpers/*"]
+			"$helpers/*": ["src/helpers/*"],
+			"$contracts": ["src/contracts"],
+			"$contracts/*": ["src/contracts/*"]
 		}
 	},
 	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"],

@@ -57,7 +57,7 @@ export const freshConnect = async (
 	// Init Provider
 	const web3InstanceProvider = await getWeb3ModalProvider(web3Modal);
 
-	return await initProvider(web3InstanceProvider);
+	return await setProvider(web3InstanceProvider);
 };
 
 // Connect using Web3Modal
@@ -69,6 +69,9 @@ export const getWeb3ModalProvider = async (web3Modal: Web3Modal) => {
 		// Init New Connection
 		provider = await web3Modal.connect();
 	}
+
+	setProvider(provider);
+
 	return provider;
 };
 
@@ -121,7 +124,6 @@ export const initWeb3ModalInstance = () => {
 						return;
 					}
 
-					console.log('MetaMask provider', provider);
 					return provider;
 				}
 			},
@@ -164,13 +166,15 @@ export const initWeb3ModalInstance = () => {
 	}
 };
 
-// Initialize App Provider
-export const initProvider = async (provider: any) => {
+// Set the provider
+const setProvider = async (provider: ethers.providers.ExternalProvider) => {
 	const ethersProvider = new ethers.providers.Web3Provider(provider);
-	ethersProvider.on('connect', (e) => console.log(Object.keys(e)));
 	appProvider.set(ethersProvider ? ethersProvider : null);
 	appSigner.set(ethersProvider ? ethersProvider.getSigner() : null);
 	userWalletAddress.set(ethersProvider ? await ethersProvider.getSigner().getAddress() : '');
+
+	// Initialize wallet events
+	initProviderEvents(ethersProvider);
 
 	console.log(
 		'WALLET CONNECTED.\n BALANCE: ',
@@ -180,4 +184,44 @@ export const initProvider = async (provider: any) => {
 	);
 
 	return ethersProvider;
+};
+
+// Refresh Connection
+export const refreshConnection = async () => {
+	const web3Modal = get(web3ModalInstance) || initWeb3ModalInstance();
+
+	// If user has a cached provider prompt for connection
+	if (web3Modal.cachedProvider) {
+		// Connect to cached wallet
+		const provider: ethers.providers.ExternalProvider = await web3Modal.connectTo(
+			web3Modal.cachedProvider
+		);
+
+		// Add provider to store
+		setProvider(provider);
+	}
+};
+
+// Wallet Events
+// Subscribe to Wallet Events
+export const initProviderEvents = (provider: ethers.providers.Web3Provider) => {
+	let pollStatus = null;
+	pollStatus = setInterval(async () => {
+		// Check for network change
+		try {
+			// If this function fails its likely the network changed
+			const networkName = (await provider.getNetwork()).name;
+		} catch (err) {
+			clearInterval(pollStatus);
+			await refreshConnection();
+		}
+
+		// Check account change
+		const newAccount = await provider.getSigner().getAddress();
+
+		if (get(userWalletAddress) !== newAccount) {
+			clearInterval(pollStatus);
+			await refreshConnection();
+		}
+	}, 1000);
 };
