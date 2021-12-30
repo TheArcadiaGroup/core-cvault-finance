@@ -1,15 +1,22 @@
-import { error } from './toastNotification';
+import { notifyError } from './toastNotification';
 import { coinbaseLogo, metamaskLogo } from './../constants/walletImages';
 import { get } from 'svelte/store';
-import { appProvider, appSigner, userWalletAddress, web3ModalInstance } from '$stores/provider';
+import {
+	appProvider,
+	appSigner,
+	externalProvider,
+	userWalletAddress,
+	web3ModalInstance,
+	connectionDetails,
+	selectedWalletName
+} from '$stores/provider';
 import Web3Modal from 'web3modal';
 import { ethers } from 'ethers';
 
 const infuraId = '456e115b04624699aa0e776f6f2ee65c';
-const defaultChainId = 1;
-const appName = 'CVault.Finance';
+const appName = 'Hinata Marketplace';
 
-// Is Metamask Installed
+// Check if Metamask is Installed
 const isMetaMaskInstalled = () => {
 	if (window.ethereum) {
 		if (window.ethereum.providers) {
@@ -34,160 +41,220 @@ const triggerSelectedWalletButton = (providerName: string) => {
 	});
 };
 
-// Initialize Connection
-export const freshConnect = async (
-	selectedProvider: 'metamask' | 'walletConnect' | 'coinbase',
-	web3Modal: Web3Modal
-) => {
-	// Check if metamask is present
-	if (selectedProvider === 'metamask' && !isMetaMaskInstalled()) {
-		error('Please Install the Metamask Browser Extension Before Proceeding');
-		console.log('Please Install the Metamask Browser Extension Before Proceeding');
-		return;
-	}
-
-	// Clear Cache since its a fresh Init
-	web3Modal.clearCachedProvider();
-	// Clear Store
-	appProvider.set(null);
-
-	// Check the selectedWallet
-	triggerSelectedWalletButton(selectedProvider);
-
-	// Init Provider
-	const web3InstanceProvider = await getWeb3ModalProvider(web3Modal);
-
-	return await setProvider(web3InstanceProvider);
-};
-
-// Connect using Web3Modal
-export const getWeb3ModalProvider = async (web3Modal: Web3Modal) => {
-	let provider;
-	if (web3Modal?.cachedProvider) {
-		provider = await web3Modal.connectTo(web3Modal?.cachedProvider);
-	} else {
-		// Init New Connection
-		provider = await web3Modal.connect();
-	}
-
-	setProvider(provider);
-
-	return provider;
-};
-
-// Initialize web3Modal Instance and set it to store
+// Initialize web3 Modal Instance
 export const initWeb3ModalInstance = () => {
-	const currentWeb3ModalInstance = get(web3ModalInstance);
-
-	if (currentWeb3ModalInstance) {
-		return currentWeb3ModalInstance;
-	} else {
-		const providerOptions = {
-			walletconnect: {
-				package: (window as any).WalletConnectProvider.default, // required
-				options: {
-					infuraId: infuraId // required
-				}
+	const providerOptions = {
+		// Replace Default Metamask Injected Wallet
+		'custom-metamask': {
+			display: {
+				logo: metamaskLogo,
+				name: 'MetaMask',
+				description: 'Connect to your MetaMask Wallet'
 			},
+			package: true,
+			connector: async () => {
+				if (!isMetaMaskInstalled()) {
+					notifyError('Please Install the Metamask Browser Extension Before Proceeding');
+					// window.location = "https://metamask.app.link/dapp/www.ethbox.org/app/"; // <-- LOOK HERE
+					return;
+				}
 
-			// Metamask
-			'custom-metamask': {
-				display: {
-					logo: metamaskLogo,
-					name: 'MetaMask',
-					description: 'Connect to your MetaMask Wallet'
-				},
-				package: true,
-				connector: async () => {
-					if (!isMetaMaskInstalled()) {
-						// window.location = "https://metamask.app.link/dapp/www.ethbox.org/app/"; // <-- LOOK HERE
-						return;
-					}
-
-					let provider = null;
-					if (typeof window.ethereum !== 'undefined') {
-						if (window.ethereum.providers) {
-							let providers = window.ethereum.providers;
-							provider = providers.find((prov) => prov.isMetaMask);
-						} else {
-							provider = window.ethereum;
-						}
-
-						try {
-							await provider.request({ method: 'eth_requestAccounts' });
-						} catch (error) {
-							console.log('Wallet Request Cancelled');
-							return;
-						}
+				let provider = null;
+				if (typeof window.ethereum !== 'undefined') {
+					if (window.ethereum.providers) {
+						let providers = window.ethereum.providers;
+						provider = providers.find((prov) => prov.isMetaMask);
 					} else {
-						console.log('No MetaMask Wallet found');
-						return;
+						provider = window.ethereum;
 					}
 
-					return provider;
+					try {
+						await provider.request({ method: 'eth_requestAccounts' });
+					} catch (error) {
+						console.log('Wallet Request Cancelled');
+						return;
+					}
+				} else {
+					console.log('No MetaMask Wallet found');
+					return;
 				}
-			},
-			// Coinbase or other WalletLink Wallets
-			'custom-coinbase': {
-				display: {
-					logo: coinbaseLogo,
-					name: 'Coinbase',
-					description: 'Scan with WalletLink to connect'
-				},
-				options: {
-					appName: appName, // Your app name
-					networkUrl: `https://mainnet.infura.io/v3/${infuraId}`,
-					chainId: defaultChainId,
-					network: 'mainnet'
-				},
-				package: (window as any).WalletLink.default,
-				connector: async (_, options) => {
-					const { appName, networkUrl, chainId } = options;
-					const walletLink = new (window as any).WalletLink.default({
-						appName
-					});
-					const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
-					await provider.enable();
-					return provider;
-				}
+
+				return provider;
 			}
-		};
+		},
 
-		const web3Modal = new Web3Modal({
-			// network: 'kovan',
-			disableInjectedProvider: true,
-			cacheProvider: true,
-			providerOptions
-		});
+		// WalletConnect
+		walletconnect: {
+			package: (window as any).WalletConnectProvider.default, // required
+			options: {
+				infuraId: infuraId // required
+			}
+		},
 
-		web3ModalInstance.set(web3Modal);
+		// Coinbase or other WalletLink Wallets
+		'custom-coinbase': {
+			display: {
+				logo: coinbaseLogo,
+				name: 'Coinbase',
+				description: 'Scan with WalletLink to connect'
+			},
+			options: {
+				appName: appName, // Your app name
+				networkUrl: `https://mainnet.infura.io/v3/${infuraId}`,
+				chainId: 1,
+				network: 'mainnet'
+			},
+			package: (window as any).WalletLink.default,
+			connector: async (_, options) => {
+				const { appName, networkUrl, chainId } = options;
+				const walletLink = new (window as any).WalletLink.default({
+					appName
+				});
+				const provider = walletLink.makeWeb3Provider(networkUrl, chainId);
+				await provider.enable();
+				return provider;
+			}
+		}
+	};
 
-		return web3Modal;
-	}
+	const web3Modal = new Web3Modal({
+		// Disabled the default injected Metamask (also launches other injected if enabled + present)
+		disableInjectedProvider: true,
+		cacheProvider: true,
+		providerOptions
+	});
+
+	web3ModalInstance.set(web3Modal);
+
+	return web3Modal;
 };
 
 // Set the provider
 const setProvider = async (provider: ethers.providers.ExternalProvider) => {
 	const ethersProvider = new ethers.providers.Web3Provider(provider);
+
+	// Commit values to store
 	appProvider.set(ethersProvider ? ethersProvider : null);
 	appSigner.set(ethersProvider ? ethersProvider.getSigner() : null);
-	userWalletAddress.set(ethersProvider ? await ethersProvider.getSigner().getAddress() : '');
-
-	// Initialize wallet events
-	initProviderEvents(ethersProvider);
-
-	console.log(
-		'WALLET CONNECTED.\n BALANCE: ',
-		ethers.utils.formatEther(
-			await ethersProvider.getBalance(await ethersProvider.getSigner().getAddress())
-		)
-	);
+	const userAddress = ethersProvider ? await ethersProvider.getSigner().getAddress() : null;
+	userWalletAddress.set(userAddress);
+	connectionDetails.set(await ethersProvider.getNetwork());
 
 	return ethersProvider;
 };
 
-// Refresh Connection
+// Disconnect Wallet
+export const disconnectWallet = () => {
+	// Clear the cached provider
+	get(web3ModalInstance) && get(web3ModalInstance).clearCachedProvider();
+	deregisterEvents();
+
+	// Clear Local Storage
+	localStorage.removeItem('walletconnect');
+
+	// Reset App Store
+	appSigner.set(null);
+	web3ModalInstance.set(null);
+	appProvider.set(null);
+	selectedWalletName.set(null);
+	externalProvider.set(null);
+};
+
+// Connect to Wallet (new connection)
+export const connectToWallet = async () => {
+	// Check if metamask is present
+	if (get(selectedWalletName) === 'metamask' && !isMetaMaskInstalled()) {
+		notifyError('Please Install the Metamask Browser Extension Before Proceeding');
+		return;
+	}
+
+	// Initialize web3Modal instance or fetch existing instance
+	const web3Modal = get(web3ModalInstance) || initWeb3ModalInstance();
+
+	// If user has a cached provider clear it
+	if (web3Modal.cachedProvider) {
+		// Clear Cached Provider
+		web3Modal.clearCachedProvider();
+	}
+
+	// Check the selectedWallet
+	triggerSelectedWalletButton(get(selectedWalletName));
+
+	// Connect to wallet
+	const provider: ethers.providers.ExternalProvider = await web3Modal.connect();
+
+	if (await isAllowedNetworks(provider)) {
+		// Init Provider Events
+		initProviderEvents(provider);
+
+		// Add provider to store
+		setProvider(provider);
+		return;
+	} else {
+		notifyError('You can only connect to mainnet or Kovan Test Network');
+		return;
+	}
+};
+
+const isAllowedNetworks = async (provider: ethers.providers.ExternalProvider) => {
+	const ethersProvider = new ethers.providers.Web3Provider(provider);
+	const chainId = (await ethersProvider.getNetwork()).chainId;
+
+	if (chainId === 1 || chainId === 42 || chainId === 31337) {
+		// only allow kovan or mainnet
+		return true;
+	} else {
+		return false;
+	}
+};
+
+// Subscribe to Wallet Events
+export const initProviderEvents = (provider: any) => {
+	// Subscribe to accounts change
+	provider.on('accountsChanged', async (accounts: string[]) => {
+		console.log('Account Changed: ', accounts);
+		deregisterEvents();
+		await refreshConnection();
+	});
+
+	// Subscribe to chainId change
+	provider.on('chainChanged', async (chainId: number) => {
+		console.log('Chain Changed: ', chainId);
+		deregisterEvents();
+		await refreshConnection();
+	});
+
+	// Subscribe to provider connection
+	provider.on('connect', (info: { chainId: number }) => {
+		console.log('Connect: ', info);
+		deregisterEvents();
+	});
+
+	// Subscribe to provider disconnection
+	provider.on('disconnect', (error: { code: number; message: string }) => {
+		console.log('Disconnect', error);
+
+		if (isAllowedNetworks(provider)) {
+			notifyError('Wallet Disconnected');
+		} else {
+			notifyError('You can only connect to mainnet or Kovan Test Network');
+		}
+
+		disconnectWallet();
+	});
+
+	externalProvider.set(provider);
+};
+
+export const deregisterEvents = () => {
+	return get(externalProvider).removeAllListeners();
+};
+
 export const refreshConnection = async () => {
+	// Reset App State
+	appSigner.set(null);
+	appProvider.set(null);
+
 	const web3Modal = get(web3ModalInstance) || initWeb3ModalInstance();
 
 	// If user has a cached provider prompt for connection
@@ -197,31 +264,16 @@ export const refreshConnection = async () => {
 			web3Modal.cachedProvider
 		);
 
-		// Add provider to store
-		setProvider(provider);
+		if (await isAllowedNetworks(provider)) {
+			// Init Provider Events
+			initProviderEvents(provider);
+
+			// Add provider to store
+			setProvider(provider);
+			return;
+		} else {
+			notifyError('You can only connect to mainnet or Kovan Test Network');
+			return;
+		}
 	}
-};
-
-// Wallet Events
-// Subscribe to Wallet Events
-export const initProviderEvents = (provider: ethers.providers.Web3Provider) => {
-	let pollStatus = null;
-	pollStatus = setInterval(async () => {
-		// Check for network change
-		try {
-			// If this function fails its likely the network changed
-			const networkName = (await provider.getNetwork()).name;
-		} catch (err) {
-			clearInterval(pollStatus);
-			await refreshConnection();
-		}
-
-		// Check account change
-		const newAccount = await provider.getSigner().getAddress();
-
-		if (get(userWalletAddress) !== newAccount) {
-			clearInterval(pollStatus);
-			await refreshConnection();
-		}
-	}, 1000);
 };

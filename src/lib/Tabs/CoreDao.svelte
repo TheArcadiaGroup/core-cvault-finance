@@ -1,5 +1,13 @@
 <script lang="ts">
-	import disconnectWallet from '$helpers/disconnectWallet';
+	import {
+		borrow,
+		depositAndBorrow,
+		depositCollateral
+	} from '$contracts/contractCalls/loanOperations';
+	import { increaseCoreAllowance } from '$contracts/contractCalls/tokenBalances';
+
+	import { disconnectWallet } from '$helpers/walletConnection';
+	import { coreBalance, coreUsageApproved, daiBalance } from '$stores/balances';
 
 	import { appSigner } from '$stores/provider';
 	import { tabStore } from '$stores/tab-store';
@@ -15,6 +23,21 @@
 	let isConnectMode = false;
 	let _previousTabStoreState;
 
+	let daiToBorrow = 0;
+	let coreForCollateral = 0;
+	let collateralToWithdraw = 0;
+	let buttonText = 'Disconnect Wallet';
+
+	const useMaxCoreTokens = () => {
+		coreForCollateral = +$coreBalance.noExponents();
+	};
+
+	const useMaxDaiTokens = () => {
+		daiToBorrow = +$daiBalance.noExponents();
+	};
+
+	const useMaxCollateralInContract = () => {};
+
 	const connectOrDisconnect = () => {
 		if ($appSigner) {
 			// Disconnect
@@ -24,6 +47,49 @@
 			isConnectMode = true;
 		}
 	};
+
+	const updateButtonText = () => {
+		if (coreForCollateral > 0) {
+			if (daiToBorrow > 0) {
+				buttonText = 'Deposit CORE and Borrow DAI';
+			} else {
+				buttonText = 'Deposit CORE';
+			}
+		} else {
+			if (daiToBorrow > 0) {
+				buttonText = 'Borrow DAI';
+			} else {
+				buttonText = 'Disconnect Wallet';
+			}
+		}
+	};
+
+	const executeRelevantButtonAction = async () => {
+		if ($coreUsageApproved) {
+			if (coreForCollateral > 0) {
+				if (daiToBorrow > 0) {
+					// 'Deposit CORE and Borrow DAI';
+					await depositAndBorrow(coreForCollateral, daiToBorrow);
+				} else {
+					// 'Deposit CORE';
+					await depositCollateral(coreForCollateral);
+				}
+			} else {
+				if (daiToBorrow > 0) {
+					// 'Borrow DAI';
+					await borrow(daiToBorrow);
+				} else {
+					// 'Disconnect Wallet';
+					disconnectWallet();
+				}
+			}
+		} else {
+			// Increase Allowance
+			await increaseCoreAllowance();
+		}
+	};
+
+	$: (daiToBorrow || coreForCollateral) && updateButtonText();
 
 	$: if (isConnectMode) {
 		tabStore.update((prev): TabStore => {
@@ -89,9 +155,9 @@
 									<img height="20" width="20" src="/images/png/core.png" alt="Core" />
 								</div>
 								<span>CORE</span>
-								<span class="dropdown">></span>
-								<input value="0.0" />
-								<button class="win-button max">Max</button>
+								<!-- <span class="dropdown">></span> -->
+								<input bind:value={coreForCollateral} />
+								<button class="win-button max" on:click={useMaxCoreTokens}>Max</button>
 							</div>
 							<hr />
 							<div>Borrow DAI</div>
@@ -100,16 +166,24 @@
 									<img height="20" width="20" src="/images/png/dai.png" alt="Dai" />
 								</div>
 								<span>DAI</span>
-								<span class="dropdown">></span>
-								<input value="0.0" />
-								<button class="win-button max">Max</button>
+								<!-- <span class="dropdown">></span> -->
+								<input bind:value={daiToBorrow} />
+								<button class="win-button max" on:click={useMaxDaiTokens}>Max</button>
 							</div>
 							<div class="button-container bottom">
-								<button class="win-button connect" on:click={connectOrDisconnect}>
-									<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
+								<button
+									class="win-button connect"
+									on:click={() =>
+										$appSigner ? executeRelevantButtonAction() : connectOrDisconnect()}
+								>
 									{#if $appSigner}
-										Disconnect Wallet
+										{#if $coreUsageApproved}
+											{buttonText}
+										{:else}
+											Approve
+										{/if}
 									{:else}
+										<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
 										Connect Wallet
 									{/if}
 								</button>
@@ -127,9 +201,9 @@
 									<img height="20" width="20" src="/images/png/core.png" alt="Core" />
 								</div>
 								<span>CORE</span>
-								<span class="dropdown">></span>
-								<input value="0.0" />
-								<button class="win-button max">Max</button>
+								<!-- <span class="dropdown">></span> -->
+								<input bind:value={collateralToWithdraw} />
+								<button class="win-button max" on:click={useMaxCollateralInContract}>Max</button>
 							</div>
 							<div class="button-container bottom" style="margin-top:2rem">
 								<button class="win-button connect" on:click={connectOrDisconnect}>

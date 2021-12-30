@@ -6,6 +6,7 @@
 	import InfoIcon from '$lib/icons/InfoIcon.svelte';
 	import { onMount } from 'svelte';
 	import { fetchService, responseMap, routes } from '$stores/fetch-service';
+	import { totalAccruedInterest, totalCoreCollateral, totalUserDebtInDai } from '$stores/balances';
 
 	export let state: TabState;
 	let loanStats: typeof responseMap['/api/loanStats'];
@@ -30,28 +31,32 @@
 			<div class="dt">
 				<dt>Collateral Value:</dt>
 				<dd>
-					<span>${positionsSummary ? positionsSummary.collateralValue : '...'}</span>
+					<span
+						>{positionsSummary ? (+$totalCoreCollateral.noExponents()).toFixed(2) : '...'} CORE</span
+					>
 					<InfoIcon />
 				</dd>
 			</div>
 			<div class="dt">
 				<dt>DAI Borrowed:</dt>
 				<dd>
-					<span>${positionsSummary ? positionsSummary.daiBorrowed : '...'}</span>
+					<span
+						>{positionsSummary ? (+$totalUserDebtInDai.noExponents()).toFixed(2) : '...'} DAI</span
+					>
 					<InfoIcon />
 				</dd>
 			</div>
 			<div class="dt">
 				<dt>Left to Borrow:</dt>
 				<dd>
-					<span>${positionsSummary ? positionsSummary.leftToBorrow : '...'}</span>
+					<span>{positionsSummary ? positionsSummary.leftToBorrow : '...'}</span>
 					<InfoIcon />
 				</dd>
 			</div>
 			<div class="dt">
 				<dt>Interest Accured:</dt>
 				<dd>
-					<span>${positionsSummary ? positionsSummary.interestAccured : '...'}</span>
+					<span>{positionsSummary ? $totalAccruedInterest.noExponents() : '...'} DAI</span>
 					<InfoIcon />
 				</dd>
 			</div>
@@ -93,6 +98,6 @@
 		@apply block h-[1px] border-0 border-t-[1px] border-border mt-4 mb-4 ml-0 mr-0 p-0;
 	}
 	dd {
-		@apply inline-flex items-center justify-center p-2 gap-1;
+		@apply inline-flex items-center justify-center p-2 gap-1 whitespace-nowrap;
 	}
 </style>

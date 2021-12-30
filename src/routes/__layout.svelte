@@ -4,19 +4,22 @@
 	import '$styles/tabs.css';
 	import Footer from '$lib/Footer.svelte';
 	import { onMount } from 'svelte';
-	import { appProvider, appSigner } from '$stores/provider';
+	import { appProvider, userWalletAddress } from '$stores/provider';
 	import Toast from '$lib/utils/Toast.svelte';
-	import { getWeb3ModalProvider, initWeb3ModalInstance } from '$helpers/walletConnection';
+	import { refreshConnection } from '$helpers/walletConnection';
+	import {
+		getAllBalances,
+		getTotalCoreCollateralInContract
+	} from '$contracts/contractCalls/tokenBalances';
 
 	onMount(async () => {
-		const web3Modal = initWeb3ModalInstance();
-
-		if (!$appProvider && web3Modal?.cachedProvider) {
-			await getWeb3ModalProvider(web3Modal);
-		} else {
-			// Wallet Not Connected
-		}
+		// Keep connection live as long as cachedProvider is present (even after reloads)
+		await refreshConnection();
 	});
+
+	$: (async (provider) => {
+		provider && $userWalletAddress && (await getAllBalances($userWalletAddress));
+	})($appProvider);
 </script>
 
 <svelte:head>

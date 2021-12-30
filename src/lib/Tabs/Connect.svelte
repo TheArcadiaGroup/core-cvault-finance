@@ -4,22 +4,15 @@
 	import Metamask from '$lib/icons/Metamask.svelte';
 	import Walletconnect from '$lib/icons/Walletconnect.svelte';
 	import Coinbase from '$lib/icons/Coinbase.svelte';
-	import { freshConnect, initWeb3ModalInstance } from '$helpers/walletConnection';
-	import { appProvider, userWalletAddress } from '$stores/provider';
-	import disconnectWallet from '$helpers/disconnectWallet';
+	import { connectToWallet, disconnectWallet } from '$helpers/walletConnection';
+	import { appProvider, selectedWalletName, userWalletAddress } from '$stores/provider';
 
 	export let close: () => void;
 
 	// Connect to Wallet Functionality
-	const connect = async (selectedProvider: 'metamask' | 'walletConnect' | 'coinbase') => {
-		const web3Modal = initWeb3ModalInstance();
-		const initializedProvider = await freshConnect(selectedProvider, web3Modal);
-		if (initializedProvider) {
-			// Close modal after successful connection
-			close();
-		} else {
-			// Do something after connection failed
-		}
+	const connect = async (selectedWallet: 'metamask' | 'walletConnect' | 'coinbase') => {
+		selectedWalletName.set(selectedWallet);
+		await connectToWallet();
 	};
 </script>
 

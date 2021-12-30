@@ -1,6 +1,6 @@
 import { toast } from '@zerodevx/svelte-toast';
 
-export const success = (message: string) => {
+export const notifySuccess = (message: string) => {
 	toast.push(message, {
 		theme: {
 			'--toastBackground': 'linear-gradient(90.32deg, #5557bc 5.48%, #a9697e 94.35%)',
@@ -11,7 +11,7 @@ export const success = (message: string) => {
 	});
 };
 
-export const warning = (message: string) => {
+export const notifyWarning = (message: string) => {
 	toast.push(message, {
 		theme: {
 			// '--toastBackground': 'linear-gradient(90.32deg, #5557bc 5.48%, #a9697e 94.35%)',
@@ -23,7 +23,7 @@ export const warning = (message: string) => {
 	});
 };
 
-export const error = (message: string) => {
+export const notifyError = (message: string) => {
 	toast.push(message, {
 		theme: {
 			'--toastBackground': '#a9697e',
