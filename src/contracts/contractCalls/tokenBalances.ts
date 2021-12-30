@@ -121,7 +121,7 @@ export const increaseCoreAllowance = async () => {
 export const increaseDaiAllowance = async () => {
 	try {
 		const daiContract = getDaiContract(get(appSigner));
-		const daiUsageAllowed = await daiContract.increaseAllowance(
+		const daiUsageAllowed = await daiContract.approve(
 			CLendingAddress,
 			ethers.utils.parseEther(ethersAllowance)
 		); // returns bool

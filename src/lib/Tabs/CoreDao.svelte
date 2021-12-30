@@ -2,11 +2,17 @@
 	import {
 		borrow,
 		depositAndBorrow,
-		depositCollateral
+		depositCollateral,
+		repayLoan
 	} from '$contracts/contractCalls/loanOperations';
-	import { increaseCoreAllowance } from '$contracts/contractCalls/tokenBalances';
+	import {
+		increaseCoreAllowance,
+		increaseDaiAllowance
+	} from '$contracts/contractCalls/tokenBalances';
 
 	import { disconnectWallet } from '$helpers/walletConnection';
+	import { daiUsageApproved } from '$stores/balances';
+	import { totalUserDebtInDai } from '$stores/balances';
 	import { coreBalance, coreUsageApproved, daiBalance } from '$stores/balances';
 
 	import { appSigner } from '$stores/provider';
@@ -26,10 +32,15 @@
 	let daiToBorrow = 0;
 	let coreForCollateral = 0;
 	let collateralToWithdraw = 0;
+	let repaymentAmount = 0;
 	let buttonText = 'Disconnect Wallet';
 
 	const useMaxCoreTokens = () => {
 		coreForCollateral = +$coreBalance.noExponents();
+	};
+
+	const setMaxRepayment = () => {
+		repaymentAmount = $totalUserDebtInDai;
 	};
 
 	const useMaxDaiTokens = () => {
@@ -206,11 +217,33 @@
 								<button class="win-button max" on:click={useMaxCollateralInContract}>Max</button>
 							</div>
 							<div class="button-container bottom" style="margin-top:2rem">
-								<button class="win-button connect" on:click={connectOrDisconnect}>
-									<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
+								<button
+									class="win-button connect"
+									on:click={() =>
+										collateralToWithdraw > 0
+											? $daiUsageApproved
+												? repayLoan(collateralToWithdraw)
+												: increaseDaiAllowance()
+											: connectOrDisconnect()}
+								>
 									{#if $appSigner}
-										Disconnect Wallet
+										{#if collateralToWithdraw > 0}
+											{#if $daiUsageApproved}
+												Repay Loan
+											{:else}
+												Approve
+											{/if}
+										{:else}
+											<img
+												height="20"
+												width="20"
+												src="/images/png/connect.png"
+												alt="Connect icon"
+											/>
+											Disconnect Wallet
+										{/if}
 									{:else}
+										<img height="20" width="20" src="/images/png/connect.png" alt="Connect icon" />
 										Connect Wallet
 									{/if}
 								</button>
